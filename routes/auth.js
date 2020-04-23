@@ -35,7 +35,7 @@ router.post("/signup", (req, res) => {
 
             if (user !== null) {
                 res.render("signup.hbs", {
-                    msg: "This email address already exists.",
+                    msg: "This user already exists.",
                 });
             } else {
                 User.create({
