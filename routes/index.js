@@ -5,8 +5,8 @@ router.get("/", (req, res) => {
   res.render("index.hbs");
 });
 
-router.get("/sneakers/:cat", (req, res) => {
-  res.send("bar");
+router.get("/sneakers/collection", (req, res) => {
+  res.render("products.hbs");
 });
 
 router.get("/one-product/:id", (req, res) => {
@@ -22,3 +22,7 @@ router.get("/signin", (req, res) => {
 });
 
 module.exports = router;
+
+// router.get("/sneakers/:cat", (req, res) => {
+//   res.send("bar");
+// });
