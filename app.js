@@ -5,11 +5,12 @@ require("./helpers/helpers-hbs.js"); // utils for hbs templates
 // base dependencies
 const express = require("express");
 const hbs = require("hbs");
-const app = express();
 const session = require("express-session");
 const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo")(session);
 const cookieParser = require("cookie-parser");
+
+const app = express();
 
 // initial config
 app.set("view engine", "hbs");
@@ -76,8 +77,14 @@ app.use(checkloginStatus);
 app.use(eraseSessionMessage());
 
 // Getting/Using router(s)
-const basePageRouter = require("./routes/index");
-app.use("/", basePageRouter);
+// const basePageRouter = require("./routes/index");
+// app.use("/", basePageRouter);
+
+// const authRouter = require("./routes/auth");
+// app.use("/", authRouter);
+
+app.use("/", require("./routes/auth.js"));
+app.use("/", require("./routes/index.js"));
 
 const listener = app.listen(process.env.PORT, () => {
   console.log(`App started at ${process.env.SITE_URL}:${process.env.PORT}`);
