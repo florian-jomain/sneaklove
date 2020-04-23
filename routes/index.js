@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.render('signup.hbs')
+  res.render("index.hbs");
 });
 
 router.get("/sneakers/:cat", (req, res) => {

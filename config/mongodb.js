@@ -6,7 +6,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 mongoose.connection.on("connected", () =>
-  console.log("yay mongodb connected :)")
+  console.log("Yay mongodb connected :)")
 );
 
 mongoose.connection.on("error", () => console.log("nay db error sorry :("));
