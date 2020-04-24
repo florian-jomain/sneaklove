@@ -20,13 +20,14 @@ router.post('/prod-add', requireAuth, uploadCloud.single('image'), (req, res) =>
         sizes,
         description,
         price,
-        category
+        category,
+        id_tags
     } = req.body;
 
     if (req.file) {
         const image = req.file.secure_url;
 
-        if (name === "" || ref === "" || sizes === "" || description === "" || price === "" || category === "") {
+        if (name === "" || ref === "" || sizes === "" || description === "" || price === "" || category === "" || id_tags === "") {
             res.render('product_add.hbs', {
                 errorMessage: 'Please fill all information.'
             });
@@ -38,20 +39,27 @@ router.post('/prod-add', requireAuth, uploadCloud.single('image'), (req, res) =>
                 description,
                 price,
                 category,
+                id_tags,
                 image
             };
 
-            Sneaker.create(newSneaker)
-                .then(dbResult => {
-                    console.log(newSneaker);
-                    res.render('/sneakers/collection', {
-                        tags: dbResult.id_tags,
-                    });
+            Tag.findById(id_tags)
+                .then(tag => {
+                    Sneaker.create(newSneaker)
+                        .then(sneaker => {
+                            res.render('/sneakers/collection', {
+                                tags: tag,
+                            });
+                        })
+                        .catch(dbErr => {
+                            console.log(dbErr);
+                        })
                 })
                 .catch(dbErr => {
                     console.log(dbErr);
                 })
         }
+
     } else {
         res.render('product_add.hbs', {
             errorMessage: 'Please fill all information.'

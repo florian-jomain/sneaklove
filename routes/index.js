@@ -8,34 +8,25 @@ router.get("/", (req, res) => {
   res.render("index.hbs");
 });
 
-// function searchTags() {
-//   Tag.find()
-//     .then(dbResult => {
-//       console.log(dbResult);
-//     })
-//     .catch(dbErr => {
-//       console.log(dbErr);
-//     })
-// }
-
 router.get("/sneakers/:cat", (req, res) => {
   const category = req.params.cat;
   if (category === 'collection') {
     Sneaker.find()
-      .then(dbResult => {
+      .then(sneakers => {
         Tag.find()
-          .then(dbResult => {
+          .then(tags => {
+            console.log(tags)
             res.render("products.hbs", {
-              sneakers: dbResult,
-              tags: dbResult,
+              sneakers: sneakers,
+              tags: tags,
             })
           })
           .catch(dbErr => {
             console.log(dbErr);
           })
-      })
-      .catch(dbErr => {
-        console.log(dbErr);
+          .catch(dbErr => {
+            console.log(dbErr);
+          });
       });
   } else {
     Sneaker.find({
