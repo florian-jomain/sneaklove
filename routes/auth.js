@@ -23,39 +23,37 @@ router.post("/signup", (req, res) => {
 
     if (name === "" || lastName === "" || email === "" || password === "") {
         res.render("signup.hbs", {
-            msg: "Please fill all information",
+            errorMessage: "Please fill in all information.",
         });
-    }
-
-    User.findOne({
-            email: email,
-        })
-        .then(user => {
-            console.log("I am here");
-
-            if (user !== null) {
-                res.render("signup.hbs", {
-                    msg: "This user already exists.",
-                });
-            } else {
-                User.create({
-                        name,
-                        lastName,
-                        email,
-                        password: hashPass,
-                    })
-                    .then((dbResult) => {
-                        console.log(dbResult);
-                        res.redirect("/sneakers/collection");
-                    })
-                    .catch((dbErr) => {
-                        console.log("This is a creation error");
+    } else {
+        User.findOne({
+                email: email,
+            })
+            .then(user => {
+                if (user !== null) {
+                    res.render("signup.hbs", {
+                        errorMessage: "This user already exists.",
                     });
-            }
-        })
-        .catch((dbErr) => {
-            console.log("This is a matching error");
-        });
+                } else {
+                    User.create({
+                            name,
+                            lastName,
+                            email,
+                            password: hashPass,
+                        })
+                        .then((dbResult) => {
+                            console.log(dbResult);
+                            res.redirect("/sneakers/collection");
+                        })
+                        .catch((dbErr) => {
+                            console.log("This is a creation error");
+                        });
+                }
+            })
+            .catch((dbErr) => {
+                console.log("This is a matching error");
+            });
+    }
 });
 
 router.get("/login", (req, res) => {
@@ -70,32 +68,28 @@ router.post("/login", (req, res, next) => {
 
     if (email === "" || password === "") {
         res.render("login.hbs", {
-            msg: "Please enter both user name and password to log in",
+            errorMessage: "Please enter user name and password to log in",
         });
+    } else {
+        User.findOne({
+                email: email,
+            })
+            .then(user => {
+                if (bcrypt.compareSync(password, user.password)) {
+                    req.session.currentUser = user;
+                    res.redirect('/sneakers/collection')
+                } else {
+                    res.render("login.hbs", {
+                        errorMessage: "Invalid credentials",
+                    });
+                }
+            })
+            .catch((dbErr) => {
+                res.render("login.hbs", {
+                    errorMessage: "Invalid credentials",
+                });
+            });
     }
-
-    User.findOne({
-            email: email,
-        })
-        .then((user) => {
-            if (!user) {
-                res.render("login.hbs", {
-                    msg: "Invalid credentials",
-                });
-            }
-
-            if (bcrypt.compareSync(password, user.password)) {
-                req.session.currentUser = user;
-                res.redirect('/sneakers/collection')
-            } else {
-                res.render("login.hbs", {
-                    msg: "Invalid credentials",
-                });
-            }
-        })
-        .catch((dbErr) => {
-            next(dbErr);
-        });
 });
 
 router.get("/logout", (req, res) => {
