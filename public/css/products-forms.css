@@ -17,6 +17,16 @@
   margin-bottom: 1.1rem;
 }
 
+.form-item-wrapper-sizes {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.form-item-wrapper-sizes p {
+  display: inline-block;
+}
+
 h3.form-title {
   border-bottom: 1px solid rgb(212, 212, 212);
   padding-bottom: .8rem;

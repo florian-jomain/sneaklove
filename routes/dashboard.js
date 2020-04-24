@@ -5,12 +5,14 @@ const Sneaker = require('../models/Sneaker.js');
 const uploadCloud = require('../config/cloudinary.js');
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
+const requireAuth = require('../middlewares/requireAuth')
 
-router.get('/prod-add', (req, res) => {
+// Create
+router.get('/prod-add', requireAuth, (req, res) => {
     res.render('product_add.hbs');
 });
 
-router.post('/prod-add', uploadCloud.single('image'), (req, res) => {
+router.post('/prod-add', requireAuth, uploadCloud.single('image'), (req, res) => {
     const {
         name,
         ref,
@@ -54,7 +56,8 @@ router.post('/prod-add', uploadCloud.single('image'), (req, res) => {
     }
 });
 
-router.get('/prod-manage', (req, res) => {
+// Read
+router.get('/prod-manage', requireAuth, (req, res) => {
     Sneaker.find()
         .then(sneaker => {
             res.render('product_manage.hbs', {
@@ -66,9 +69,36 @@ router.get('/prod-manage', (req, res) => {
         })
 });
 
-router.get('/prod-delete/:id', (req, res) => {
+// Delete
+router.get('/prod-delete/:id', requireAuth, (req, res) => {
     const id = req.params.id;
     Sneaker.findByIdAndDelete(id)
+        .then(dbResult => {
+            res.redirect('/prod-manage');
+        })
+        .catch(dbErr => {
+            console.log(dbErr);
+        })
+})
+
+// Update
+router.get('/prod-edit/:id', requireAuth, (req, res) => {
+    Sneaker.findById(req.params.id)
+        .then(dbResult => {
+            res.render('product_edit.hbs', {
+                sneaker: dbResult,
+            })
+        })
+        .catch(dbErr => {
+            console.log(dbErr);
+        })
+})
+
+router.post('/prod-edit/:id', requireAuth, (req, res) => {
+    const id = req.params.id;
+    Sneaker.findByIdAndUpdate(id, req.body, {
+            new: true
+        })
         .then(dbResult => {
             res.redirect('/prod-manage');
         })
