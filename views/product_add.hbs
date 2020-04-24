@@ -77,10 +77,12 @@
   <div class="add-tag-form">
     <p id="add-tag-message" class="msg"></p>
     <h3 class="form-title">Add tags</h3>
-    <div class="form-item-wrapper flexed-item">
-      <label for="category-name" class="category-name label">Sneaker tag</label>
-      <input id="new_tag_name" type="text" class="input" placeholder="ex: Gangsta">
-    </div>
-    <button id="btn_new_tag" class="button-primary add-category-btn">Create this category</button>
+    <form action="/prod-add/tags" method="POST">
+      <div class="form-item-wrapper flexed-item">
+        <label for="label" class="category-name label">Sneaker tag</label>
+        <input name="label" id="label" type="text" class="input" placeholder="ex: Gangsta">
+      </div>
+      <button id="btn_new_tag" class="button-primary add-category-btn">Create this tag</button>
+    </form>
   </div>
 </div>

@@ -2,19 +2,37 @@ const express = require("express");
 const router = express.Router();
 const hbs = require('hbs');
 const Sneaker = require('../models/Sneaker');
+const Tag = require('../models/Tag');
 
 router.get("/", (req, res) => {
   res.render("index.hbs");
 });
+
+// function searchTags() {
+//   Tag.find()
+//     .then(dbResult => {
+//       console.log(dbResult);
+//     })
+//     .catch(dbErr => {
+//       console.log(dbErr);
+//     })
+// }
 
 router.get("/sneakers/:cat", (req, res) => {
   const category = req.params.cat;
   if (category === 'collection') {
     Sneaker.find()
       .then(dbResult => {
-        res.render("products.hbs", {
-          sneakers: dbResult,
-        });
+        Tag.find()
+          .then(dbResult => {
+            res.render("products.hbs", {
+              sneakers: dbResult,
+              tags: dbResult,
+            })
+          })
+          .catch(dbErr => {
+            console.log(dbErr);
+          })
       })
       .catch(dbErr => {
         console.log(dbErr);
@@ -33,6 +51,11 @@ router.get("/sneakers/:cat", (req, res) => {
       });
   }
 });
+
+
+
+
+
 
 router.get("/one-product/:id", (req, res) => {
   const id = req.params.id;

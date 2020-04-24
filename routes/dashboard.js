@@ -2,12 +2,13 @@ const express = require("express");
 const router = new express.Router();
 const User = require('../models/user.js');
 const Sneaker = require('../models/Sneaker.js');
+const Tag = require('../models/Tag.js');
 const uploadCloud = require('../config/cloudinary.js');
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const requireAuth = require('../middlewares/requireAuth')
 
-// Create
+// Create item
 router.get('/prod-add', requireAuth, (req, res) => {
     res.render('product_add.hbs');
 });
@@ -43,7 +44,9 @@ router.post('/prod-add', requireAuth, uploadCloud.single('image'), (req, res) =>
             Sneaker.create(newSneaker)
                 .then(dbResult => {
                     console.log(newSneaker);
-                    res.redirect('/sneakers/collection');
+                    res.render('/sneakers/collection', {
+                        tags: dbResult.id_tags,
+                    });
                 })
                 .catch(dbErr => {
                     console.log(dbErr);
@@ -55,6 +58,18 @@ router.post('/prod-add', requireAuth, uploadCloud.single('image'), (req, res) =>
         });
     }
 });
+
+// Create tag
+
+router.post('/prod-add/tags', (req, res) => {
+    Tag.create(req.body)
+        .then(dbResult => {
+            res.redirect('/prod-add');
+        })
+        .catch(dbErr => {
+            console.log(dbErr);
+        })
+})
 
 // Read
 router.get('/prod-manage', requireAuth, (req, res) => {

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-let ObjectId = Schema.ObjectId;
+const Tag = require('./Tag');
 
 const sneakerSchema = new Schema({
     name: String,
@@ -15,7 +15,10 @@ const sneakerSchema = new Schema({
         type: [String],
         enum: ['men', 'women', 'kids']
     },
-    id_tags: ObjectId,
+    id_tags: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Tag'
+    }],
     image: String,
 });
 
