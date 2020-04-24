@@ -6,18 +6,20 @@
         <th class="table-head">Sneaker Image</th>
         <th class="table-head">Sneaker Name</th>
         <th class="table-head">Sneaker Ref</th>
-        <th class="table-head">Sneaker Prixe</th>
+        <th class="table-head">Sneaker Price</th>
         <th class="table-head">Edit</th>
         <th class="table-head">Delete</th>
       </tr>
     </thead>
 
     <tbody>
+
       {{#each sneakers}}
       <tr class="table-row">
         {{> dashboard_sneaker_row}}
       </tr>
       {{/each}}
+
       {{#unless sneakers}}
       <tr>
         <td colspan="6">sorry no sneakers yet</td>

@@ -59,5 +59,11 @@
 }
 
 .error {
-  color: crimson;
+  background: rgb(0, 202, 135);
+  color: white;
+  text-transform: uppercase;
+  font-size: .8rem;
+  padding: .8rem;
+  border-radius: .5rem;
+  margin-bottom: .5rem;
 }

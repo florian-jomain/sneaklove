@@ -10,7 +10,7 @@ const sneakerSchema = new Schema({
         enum: ['34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44']
     },
     description: String,
-    price: String,
+    price: Number,
     category: {
         type: [String],
         enum: ['men', 'women', 'kids']
